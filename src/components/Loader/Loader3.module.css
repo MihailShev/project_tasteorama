@@ -1,0 +1,69 @@
+.foodLoaderContainer {
+  overflow: hidden;
+  width: 100%;
+  overflow: hidden;
+  z-index: 111;
+  background: #fbfcf8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 48px;
+}
+
+.foodTrack {
+  display: flex;
+  gap: 1rem;
+  white-space: nowrap;
+  animation: scrollLeft 20s linear infinite;
+}
+
+.foodItem {
+  font-size: 2rem;
+  user-select: none;
+}
+.scrollTrack {
+  width: 100%;
+  overflow: hidden;
+}
+
+.scrollingContent {
+  display: flex;
+  animation: scrollRight 20s linear infinite;
+
+  width: fit-content;
+}
+.item {
+  margin-right: 15px;
+}
+.wrap {
+  border: 3px solid #3f2f29;
+  border-radius: 8px;
+  background-color: #ffffffe6;
+  z-index: 1111;
+  height: 54px;
+  max-width: 300px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@media only screen and (min-width: 768px) {
+  .wrap {
+    order: 2;
+    max-width: 400px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+}

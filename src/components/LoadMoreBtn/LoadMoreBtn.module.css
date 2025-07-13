@@ -1,0 +1,36 @@
+.loadMore {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  width: 100%;
+  color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #9b6c43;
+  margin-bottom: 48px;
+  height: 54px;
+}
+
+@media only screen and (min-width: 768px) {
+  .loadMore {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 48px auto;
+    max-width: 338px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    &:focus,
+    &:hover {
+      box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
+    }
+    &:active {
+      background-color: #6d554b;
+      box-shadow: none;
+    }
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .loadMore {
+    max-width: 289px;
+  }
+}
