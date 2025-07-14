@@ -21,6 +21,10 @@ body {
   background: #fbfcf8;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 h1,
 h2,
 h3,

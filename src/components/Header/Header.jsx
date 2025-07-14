@@ -23,8 +23,20 @@ export default function Header() {
     setShowLogoutModal(false);
   };
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
-  const closeMenu = () => setMenuOpen(false);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    if (!menuOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+    document.body.classList.remove("modal-open");
+  };
+
   const handleLinkClick = () => setMenuOpen(false);
 
   useEffect(() => {
