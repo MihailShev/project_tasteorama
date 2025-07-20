@@ -1,51 +1,40 @@
-import { useEffect, useState } from "react";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { logIn } from "../../redux/auth/operations";
-import { clearAuthError } from "../../redux/auth/slice.js";
-import { toast } from "react-toastify";
-import css from "./LoginForm.module.css";
+import { useState } from 'react';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { logIn } from '../../redux/auth/operations';
+import { toast } from 'react-toastify';
+import css from './LoginForm.module.css';
 
 const LoginSchema = Yup.object({
   email: Yup.string()
-    .email("Please enter a valid email address")
-    .max(128, "Email must be 128 characters or less")
-    .required("Email is required"),
+    .trim()
+    .email('Please enter a valid email address')
+    .max(128, 'Email must be 128 characters or less')
+    .required('Email is required'),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .max(128, "Password must be 128 characters or less")
-    .required("Password is required"),
+    .min(8, 'Password must be at least 8 characters')
+    .max(128, 'Password must be 128 characters or less')
+    .required('Password is required'),
 });
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error, isLoading } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(`Login failed: ${error}`, {
-        position: "top-right",
-        autoClose: 5000,
-        pauseOnHover: true,
-      });
-      dispatch(clearAuthError());
-    }
-  }, [error, dispatch]); 
-
- const handleSubmit = async (values, actions) => {
+  const handleSubmit = async (values, actions) => {
     try {
       await dispatch(logIn(values)).unwrap();
       actions.resetForm();
-      toast.success("Login successful!");
-      navigate("/");
+      toast.success('Login successful!');
+      navigate('/');
     } catch {
-      toast.error("Login failed.");
+      toast.error('Login failed.');
     }
   };
   return (
@@ -54,7 +43,7 @@ export default function LoginForm() {
         <h2 className={css.title}>Login</h2>
 
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ email: '', password: '' }}
           validationSchema={LoginSchema}
           onSubmit={handleSubmit}
         >
@@ -70,11 +59,11 @@ export default function LoginForm() {
                       id="email"
                       placeholder="email@gmail.com"
                       className={`${css.field} ${
-                        meta.touched && meta.error ? css.errorField : ""
+                        meta.touched && meta.error ? css.errorField : ''
                       }`}
                     />
                     <div className={css.errorMessage}>
-                      {(meta.touched && meta.error) || "\u00A0"}
+                      {(meta.touched && meta.error) || '\u00A0'}
                     </div>
                   </>
                 )}
@@ -88,11 +77,11 @@ export default function LoginForm() {
                     <div className={css.passwordFieldWrapper}>
                       <input
                         {...field}
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
                         placeholder="*********"
                         className={`${css.field} ${
-                          meta.touched && meta.error ? css.errorField : ""
+                          meta.touched && meta.error ? css.errorField : ''
                         }`}
                       />
                       <button
@@ -100,13 +89,13 @@ export default function LoginForm() {
                         onClick={() => setShowPassword((prev) => !prev)}
                         className={css.eyeToggleBtn}
                         aria-label={
-                          showPassword ? "Hide password" : "Show password"
+                          showPassword ? 'Hide password' : 'Show password'
                         }
                       >
                         <svg className={css.eyeIcon}>
                           <use
                             href={`/img/svg/icons.svg#${
-                              showPassword ? "icon-eye" : "icon-eye-crossed"
+                              showPassword ? 'icon-eye' : 'icon-eye-crossed'
                             }`}
                             fill="none"
                           />
@@ -114,7 +103,7 @@ export default function LoginForm() {
                       </button>
                     </div>
                     <div className={css.errorMessage}>
-                      {(meta.touched && meta.error) || "\u00A0"}
+                      {(meta.touched && meta.error) || '\u00A0'}
                     </div>
                   </>
                 )}
@@ -122,11 +111,11 @@ export default function LoginForm() {
             </label>
 
             <button className={css.button} type="submit" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? 'Logging in...' : 'Login'}
             </button>
 
             <p className={css.bottomText}>
-              Don&apos;t have an account?{" "}
+              Don&apos;t have an account?{' '}
               <Link to="/auth/register">Register</Link>
             </p>
           </Form>

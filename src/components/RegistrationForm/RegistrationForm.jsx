@@ -1,57 +1,52 @@
-import { useState, useEffect } from "react";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { register } from "../../redux/auth/operations";
-import { toast } from "react-toastify";
-import css from "./RegistrationForm.module.css";
+import { useState } from 'react';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { register } from '../../redux/auth/operations';
+import { toast } from 'react-toastify';
+import css from './RegistrationForm.module.css';
 
 const RegisterSchema = Yup.object({
   name: Yup.string()
-    .max(16, "Name must be 16 characters or less")
-    .required("Name is required"),
+    .trim()
+    .min(3, 'Name must be at least 3 characters')
+    .max(16, 'Name must be 16 characters or less')
+    .required('Name is required'),
   email: Yup.string()
-    .email("Please enter a valid email address")
-    .max(128, "Email must be 128 characters or less")
-    .required("Email is required"),
+    .trim()
+    .email('Please enter a valid email address')
+    .max(128, 'Email must be 128 characters or less')
+    .required('Email is required'),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .max(128, "Password must be 128 characters or less")
-    .required("Password is required"),
+    .min(8, 'Password must be at least 8 characters')
+    .max(128, 'Password must be 128 characters or less')
+    .required('Password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords do not match")
-    .required("Please confirm your password"),
+    .required('Please confirm your password')
+    .oneOf([Yup.ref('password'), null], 'Passwords do not match'),
   agree: Yup.boolean()
-    .oneOf([true], "You must accept the terms and conditions")
-    .required("Required"),
+    .oneOf([true], 'You must accept the terms and conditions')
+    .required('Required'),
 });
 
 export default function RegistrationForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error, isLoading } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(`Registration failed: ${error}`, {
-        position: "top-right",
-        autoClose: 5000,
-        pauseOnHover: true,
-      });
-    }
-  }, [error]);
   const initialValues = {
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     agree: false,
   };
+
   const handleSubmit = async (values, actions) => {
     const { name, email, password } = values;
     try {
@@ -60,10 +55,9 @@ export default function RegistrationForm() {
       toast.success(
         `Welcome aboard, ${name}! We're excited to have you with us!`
       );
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      toast.error("Registration failed.");
+      navigate('/');
+    } catch {
+      toast.error('Registration failed,try again.');
     }
   };
   return (
@@ -89,12 +83,12 @@ export default function RegistrationForm() {
                   id="name"
                   placeholder="Max"
                   className={`${css.field} ${
-                    errors.name && touched.name ? css.errorField : ""
+                    errors.name && touched.name ? css.errorField : ''
                   }`}
                 />
                 <div
                   className={`${css.errorMessage} ${
-                    errors.name && touched.name ? css.visible : ""
+                    errors.name && touched.name ? css.visible : ''
                   }`}
                 >
                   {errors.name}
@@ -108,12 +102,12 @@ export default function RegistrationForm() {
                   id="email"
                   placeholder="email@gmail.com"
                   className={`${css.field} ${
-                    errors.email && touched.email ? css.errorField : ""
+                    errors.email && touched.email ? css.errorField : ''
                   }`}
                 />
                 <div
                   className={`${css.errorMessage} ${
-                    errors.email && touched.email ? css.visible : ""
+                    errors.email && touched.email ? css.visible : ''
                   }`}
                 >
                   {errors.email}
@@ -124,11 +118,11 @@ export default function RegistrationForm() {
                 <div className={css.passwordFieldWrapper}>
                   <Field
                     name="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     placeholder="*********"
                     className={`${css.field} ${
-                      errors.password && touched.password ? css.errorField : ""
+                      errors.password && touched.password ? css.errorField : ''
                     }`}
                   />
                   <button
@@ -139,7 +133,7 @@ export default function RegistrationForm() {
                     <svg className={css.eyeIcon}>
                       <use
                         href={`/img/svg/icons.svg#${
-                          showPassword ? "icon-eye" : "icon-eye-crossed"
+                          showPassword ? 'icon-eye' : 'icon-eye-crossed'
                         }`}
                         fill="none"
                       />
@@ -148,7 +142,7 @@ export default function RegistrationForm() {
                 </div>
                 <div
                   className={`${css.errorMessage} ${
-                    errors.password && touched.password ? css.visible : ""
+                    errors.password && touched.password ? css.visible : ''
                   }`}
                 >
                   {errors.password}
@@ -159,13 +153,13 @@ export default function RegistrationForm() {
                 <div className={css.passwordFieldWrapper}>
                   <Field
                     name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     id="confirmPassword"
                     placeholder="*********"
                     className={`${css.field} ${
                       errors.confirmPassword && touched.confirmPassword
                         ? css.errorField
-                        : ""
+                        : ''
                     }`}
                   />
                   <button
@@ -176,7 +170,7 @@ export default function RegistrationForm() {
                     <svg className={css.eyeIcon}>
                       <use
                         href={`/img/svg/icons.svg#${
-                          showConfirmPassword ? "icon-eye" : "icon-eye-crossed"
+                          showConfirmPassword ? 'icon-eye' : 'icon-eye-crossed'
                         }`}
                         fill="none"
                       />
@@ -187,7 +181,7 @@ export default function RegistrationForm() {
                   className={`${css.errorMessage} ${
                     errors.confirmPassword && touched.confirmPassword
                       ? css.visible
-                      : ""
+                      : ''
                   }`}
                 >
                   {errors.confirmPassword}
@@ -209,15 +203,15 @@ export default function RegistrationForm() {
                         </svg>
                       </span>
                       <span className={css.labelText}>
-                        I agree to the{" "}
+                        I agree to the
                         <a
                           href="/terms"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
                           Terms of Service
-                        </a>{" "}
-                        and{" "}
+                        </a>
+                        and
                         <a
                           href="/privacy"
                           target="_blank"
@@ -231,7 +225,7 @@ export default function RegistrationForm() {
                     {meta.touched && meta.error && (
                       <div
                         className={`${css.errorMessage} ${
-                          meta.touched && meta.error ? css.visible : ""
+                          meta.touched && meta.error ? css.visible : ''
                         }`}
                       >
                         {meta.error}
@@ -241,7 +235,7 @@ export default function RegistrationForm() {
                 )}
               </Field>
               <button className={css.button} type="submit" disabled={isLoading}>
-                {isLoading ? "Registering..." : "Create account"}
+                {isLoading ? 'Registering...' : 'Create account'}
               </button>
               <p className={css.bottomText}>
                 Already have an account? <Link to="/auth/login">Log in</Link>
