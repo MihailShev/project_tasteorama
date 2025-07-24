@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import {
   register,
   logIn,
@@ -6,7 +6,7 @@ import {
   refresh,
   addFavorite,
   removeFavorite,
-} from "./operations.js";
+} from './operations.js';
 
 const initialState = {
   user: {
@@ -21,18 +21,18 @@ const initialState = {
   isRefreshing: false,
 };
 
+const formatUser = (user) => ({
+  name: user?.name || null,
+  email: user?.email || null,
+  favorites: Array.isArray(user?.favorites) ? user.favorites : [],
+});
+
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setCredentials(state, action) {
-      state.user = {
-        name: action.payload.user?.name || null,
-        email: action.payload.user?.email || null,
-        favorites: Array.isArray(action.payload.user?.favorites)
-          ? action.payload.user.favorites
-          : [],
-      };
+      state.user = formatUser(action.payload);
       state.token = action.payload.token;
       state.isLoggedIn = true;
     },
@@ -50,12 +50,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.user = action.payload.user
-          ? {
-              ...action.payload.user,
-              favorites: action.payload.user.favorites || [],
-            }
-          : { name: null, email: null, favorites: [] };
+        state.user = formatUser(action.payload.user);
         state.token = action.payload.token || null;
         state.isLoggedIn = true;
         state.isLoading = false;
@@ -63,7 +58,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.error =
-          action.payload || action.error?.message || "Something went wrong";
+          action.payload || action.error?.message || 'Something went wrong';
         state.isLoading = false;
       })
       .addCase(logIn.pending, (state) => {
@@ -71,12 +66,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(logIn.fulfilled, (state, action) => {
-        state.user = action.payload.user
-          ? {
-              ...action.payload.user,
-              favorites: action.payload.user.favorites || [],
-            }
-          : { name: null, email: null, favorites: [] };
+        state.user = formatUser(action.payload.user);
         state.token = action.payload.token;
         state.isLoggedIn = true;
         state.isLoading = false;
@@ -88,14 +78,8 @@ const authSlice = createSlice({
       })
       .addCase(logOut.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
-      .addCase(logOut.fulfilled, (state) => {
-        state.user = { name: null, email: null, favorites: [] };
-        state.token = null;
-        state.isLoggedIn = false;
-        state.isLoading = false;
-      })
+      .addCase(logOut.fulfilled, () => initialState)
       .addCase(logOut.rejected, (state, action) => {
         state.error = action.payload || action.error?.message;
         state.isLoading = false;
@@ -125,5 +109,5 @@ const authSlice = createSlice({
       }),
 });
 
-export const { setCredentials, clearAuthError, logout } = authSlice.actions;
+export const { setCredentials, logout } = authSlice.actions;
 export default authSlice.reducer;
